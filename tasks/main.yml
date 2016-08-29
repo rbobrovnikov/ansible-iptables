@@ -1,0 +1,17 @@
+---
+
+- name: iptables installing
+  yum: name=iptables state=present
+  tags: iptables
+  notify:
+   - iptables start
+  
+- name: iptables-services installing
+  yum: name=iptables-services state=present
+  tags: iptables
+  
+- name: iptables configuring
+  template: src=templates/iptables.j2 dest=/etc/sysconfig/iptables
+  tags: iptables
+  notify:
+   - iptables restart

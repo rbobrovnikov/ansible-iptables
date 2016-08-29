@@ -1,0 +1,23 @@
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
+-A INPUT -p tcp -m state --state NEW --tcp-flags SYN,ACK SYN,ACK -j REJECT --reject-with tcp-reset
+-A INPUT -p tcp -m state --state NEW ! --syn -j DROP
+-A INPUT -p tcp -m conntrack --ctstate INVALID -j DROP
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+
+{% for ip in fullaccess_nets %}
+-A INPUT -s {{ ip }} -j ACCEPT
+{% endfor %}
+
+-A INPUT -p tcp -m tcp --dport {{ http_port }} -m state --state NEW -j ACCEPT
+-A INPUT -p tcp -m tcp --dport {{ https_port }} -m state --state NEW -j ACCEPT
+-A INPUT -p tcp -m tcp --dport {{ ssh_alt_port }} -m state --state NEW -j ACCEPT
+
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
