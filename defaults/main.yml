@@ -2,6 +2,8 @@
 
 fullaccess_nets:
  - 37.115.0.0/16
+ - 91.241.80.32/29 
+ - 91.241.80.40/29 
 http_port: 80
 https_port: 443 
 ssh_alt_port: 7722

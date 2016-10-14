@@ -8,6 +8,7 @@
 -A INPUT -p tcp -m conntrack --ctstate INVALID -j DROP
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -p icmp -j ACCEPT
+-A INPUT -i eth1 -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 
 {% for ip in fullaccess_nets %}
